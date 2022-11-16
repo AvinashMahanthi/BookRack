@@ -2,9 +2,9 @@ import React from "react";
 import bookimg from "../images/book.png";
 
 const books = ({ books, loading }) => {
-  //   if (loading) {
-  //     return <h2>Loading...</h2>;
-  //   }
+  if (loading) {
+    return <h2>Loading...</h2>;
+  }
 
   return (
     <ul className="list-group mb-4">
@@ -12,7 +12,7 @@ const books = ({ books, loading }) => {
         <>
           <div className="card grid-container">
             <div className="grid-child">
-              <img src={bookimg} />
+              <img src={bookimg} alt="book-img" />
             </div>
             <div className="card-body grid-child">
               <h2>{book.title}</h2>

@@ -9,28 +9,19 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import { NavDropdown } from "react-bootstrap";
 
 function App() {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [booksPerPage] = useState(10);
-
-  const [selectedOption, setSelectedOption] = useState("");
+  const [results, setResults] = useState("");
 
   useEffect(() => {
-    // console.log(books);
     setLoading(true);
     setBooks(BooksData);
     setLoading(false);
   }, []);
-
-  // const options = [
-  //   { key: 1, value: "Author" },
-  //   { key: 2, value: "Title" },
-  //   { key: 3, value: "Year" },
-  // ];
 
   const indexOfLastBook = currentPage * booksPerPage;
   const indexOfFirstBook = indexOfLastBook - booksPerPage;
@@ -43,16 +34,20 @@ function App() {
   const searchSecificBook = (term) => {
     if (term !== " ") {
       const newBooks = books.filter((item) => {
-        return Object.keys(item).some((key) => {
-          return item[key]
+        // return item.author.toLowerCase().includes(term.toLowerCase());
+        return Object.keys(item).some((keys) => {
+          return item[keys]
             .toString()
             .toLowerCase()
             .includes(term.toLowerCase());
         });
-        // return books.author.toLowerCase().includes(term.toLowerCase());
       });
       setBooks(newBooks);
-      // console.log(newBooks);
+      newBooks.length > 0
+        ? setResults(newBooks.length)
+        : setResults("Sorry, No results Found :(");
+      // setResults(newBooks.length);
+      console.log(newBooks.length);
     } else {
       setBooks(BooksData);
     }
@@ -62,49 +57,22 @@ function App() {
     <div className="App">
       <Navbar bg="dark" variant="dark">
         <Container>
-          <Navbar.Brand href="#home">BookRack</Navbar.Brand>
+          <Navbar.Brand href="#">BookRack</Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#features">Features</Nav.Link>
-            <NavDropdown title="Filter" id="basic-nav-dropdown">
-              {/* {options.map((option) => {
-                <NavDropdown.Item
-                  selectedKey={selectedOption}
-                  
-                >
-                  {option.value}
-                </NavDropdown.Item>;
-              })} */}
-              <NavDropdown.Item
-                onSelect={() => {
-                  setSelectedOption("title");
-                }}
-              >
-                Title
-              </NavDropdown.Item>
-              <NavDropdown.Item
-                onSelect={() => {
-                  setSelectedOption("author");
-                }}
-              >
-                Author
-              </NavDropdown.Item>
-              <NavDropdown.Item
-                onSelect={() => {
-                  setSelectedOption("year");
-                }}
-              >
-                Published Year
-              </NavDropdown.Item>
-            </NavDropdown>
-            <Form className="d-flex ml-2">
+            <Nav.Link className="mt-2" href="#home">
+              Home
+            </Nav.Link>
+            <Nav.Link className="mt-2" href="#features">
+              Features
+            </Nav.Link>
+            <Form className="d-flex m-2">
               <Form.Control
                 type="search"
                 placeholder="Search"
                 className="me-2"
-                aria-label="Search"
+                aria-label="Search.."
                 onInput={(e) => {
-                  searchSecificBook(e.target.value, selectedOption);
+                  searchSecificBook(e.target.value);
                 }}
               />
               <Button variant="outline-success ml-3">Search</Button>
@@ -113,17 +81,25 @@ function App() {
         </Container>
       </Navbar>
       <header className="App-header">
-        <Books books={currentBooks} loading={loading} />
-        <div className="">
-          <div className=""></div>
-          <div className="">
-            <Pagination
-              booksPerPage={booksPerPage}
-              totalBooks={books.length}
-              paginate={paginate}
-            />
+        {results ? (
+          <div className="card-body">
+            <h4>{results} Results found</h4>
+          </div>
+        ) : (
+          <></>
+        )}
+
+        <div className="container">
+          <div className="row">
+            <Books books={currentBooks} loading={loading} />
           </div>
         </div>
+
+        <Pagination
+          booksPerPage={booksPerPage}
+          totalBooks={books.length}
+          paginate={paginate}
+        />
       </header>
     </div>
   );

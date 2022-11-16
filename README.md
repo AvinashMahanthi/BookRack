@@ -1,6 +1,8 @@
 # Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is a library management page where we can able to see the list of books. 
+* In this pagination is implemented, one can able to see 10 books per page and so on..
+* We can able to search the books on the basis of the each criteria like Title, author and published year.
 
 ## Available Scripts
 
